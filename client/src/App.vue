@@ -46,17 +46,19 @@ onMounted(() => {
       <h1> Boas vindas, {{ user.nome }} </h1>
 
       <!-- Printing the user RM -->
-      <h2> RM: {{ user.rm }} </h2>
+      <h2 v-if="user.rm"> RM: {{ user.rm }} </h2>
+      <h2 v-if="user.ra"> RA: {{ user.ra }} </h2>
 
       <!-- Printing the roles of the user -->
-      <span> Permissões: {{ user.permissoes.join(', ') }}. </span>
+      <span v-if="user.permissoes"> Permissões: {{ user.permissoes.join(', ') }}. </span>
 
       <!-- Using V-IF to check if there are any user's information -->
-      <nav v-if="!user">
+    </div>
+    <nav v-if="!user">
         <RouterLink to="/register">Cadastrar</RouterLink>
         <RouterLink to="/login">Entrar</RouterLink>
+        <RouterLink to="/login_aluno">Entrar como Aluno</RouterLink>
       </nav>
-    </div>
   </header>
 
   <RouterView />

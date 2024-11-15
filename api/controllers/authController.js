@@ -2,6 +2,7 @@
 const Professor = require('../models/tb_Professor');
 const tipo_Prof = require('../models/tb_Tipo_Prof');
 const Permissao = require('../models/tb_Permissao');
+const Aluno = require('../models/tb_Aluno');
 
 // Lib and config imports
 const { bcrypt, jwt } = require('../imports/imports');
@@ -97,6 +98,43 @@ const loginProfessor = async (req, res) => {
 
 }
 
+const loginAluno = async (req, res) => {
+
+    try
+    {
+        const { ra, password } = req.body;
+
+        console.log(ra, password)
+
+        const aluno = await Aluno.findOne({ where: { RA: ra } });
+    
+        if(!aluno){
+            return res.status(404).json({ message: 'Aluno não encontrado' });
+        }
+    
+        // Verify if the password is correct
+        const isMatch = await bcrypt.compare(password, aluno.Senha)
+    
+        if(!isMatch){
+            return res.status(401).json({ message: 'Senha incorreta' })
+        }
+        
+        const token = jwt.sign(
+            { id: aluno.ID_Aluno, ra: aluno.RA, nome: aluno.Nome, status: aluno.Status },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+    
+        return res.json(token);
+    }
+    catch(err)
+    {
+        console.log(err)
+        return res.status(500).json({ message: 'Erro ao fazer login' })
+    }
+
+}
+
 // Function to verify the roles of a teacher
 async function verifyPermissoes(professor, roles, res) {
 
@@ -137,5 +175,6 @@ async function verifyPermissoes(professor, roles, res) {
 
 module.exports = {
     createProfessor,
-    loginProfessor
+    loginProfessor,
+    loginAluno
 }

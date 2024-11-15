@@ -2,7 +2,7 @@
 const { express, bodyParser, cors } = require('../imports/imports');
 
 // JWT Secret
-const JWT_SECRET = 'secret';
+const JWT_SECRET = 'gertrudes';
 
 // Express Instance
 const app = express();

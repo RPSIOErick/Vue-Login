@@ -25,5 +25,5 @@ const Permissao = sq.define('Permissao', {
 
 Permissao.removeAttribute('id');
 
-  module.exports = Permissao;
+module.exports = Permissao;
   
